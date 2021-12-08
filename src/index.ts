@@ -1,4 +1,4 @@
-import { CanvasImageMaker } from './components/canvas-image-maker.component';
-import { Coordinates } from './definitions';
+import { CanvasImageVisualizer } from './components/canvas-image-visualizer.component';
+import { Coordinates, MappedImage, CanvasConfigDefaults, Drawer, Particle } from './definitions';
 
-export { CanvasImageMaker, Coordinates };
+export { CanvasImageVisualizer, Coordinates, MappedImage, CanvasConfigDefaults, Drawer, Particle };

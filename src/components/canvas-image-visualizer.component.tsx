@@ -2,14 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useImmutableRef } from '@mertsolak/use-immutable-ref';
 
 import { Props, Particle, MappedImage } from '../definitions';
-import { canvasConfig } from '../configs';
 import { colorHelper, particleHelper } from '../helpers';
+import { canvasConfig } from '../configs';
 
-export const CanvasImageMaker: React.FC<Props> = ({
+export const CanvasImageVisualizer: React.FC<Props> = ({
   particleNumberMultiplier = canvasConfig.defaults.particleNumberMultiplier,
   velocityMultiplier = canvasConfig.defaults.velocityMultiplier,
   backgroundColor = canvasConfig.defaults.backgroundColor,
   sizeMultiplier = canvasConfig.defaults.sizeMultiplier,
+  removeBlackArea = canvasConfig.defaults.removeBlackArea,
+  drawer = canvasConfig.defaults.drawer,
+  drawerColor,
   className,
   src,
 }) => {
@@ -19,6 +22,14 @@ export const CanvasImageMaker: React.FC<Props> = ({
 
   const mouseCoordinateRef = useRef({ x: 0, y: 0 });
 
+  /**
+   * draws particles recursively and updates
+   * coordinates and velocities for the next frames
+   * @param contextParam @type CanvasRenderingContext2D
+   * @param imageParam @type HTMLImageElement
+   * @param particles @type particles[]
+   * @param mappedImage @type MappedImage
+   */
   const draw = useCallback(
     (
       contextParam: CanvasRenderingContext2D,
@@ -26,25 +37,30 @@ export const CanvasImageMaker: React.FC<Props> = ({
       particles: Particle[],
       mappedImage: MappedImage,
     ) => {
-      contextParam.fillStyle = canvasConfig.defaults.rectangleColor;
+      contextParam.fillStyle = backgroundColor;
       contextParam.globalAlpha = canvasConfig.defaults.globalAlpha;
       contextParam.fillRect(0, 0, imageParam.width, imageParam.height);
 
       particles.forEach((particle) => {
         contextParam.beginPath();
         contextParam.fillStyle = mappedImage[Math.floor(particle.y)][Math.floor(particle.x)].color;
-        contextParam.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        contextParam.fill();
+        if (particle.text) {
+          contextParam.font = `${particle.size}`;
+          contextParam.fillText(particle.text, particle.x, particle.y);
+        } else {
+          contextParam.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          contextParam.fill();
+        }
       });
 
       const updatedParticles = particleHelper.updateParticles(particles, imageParam, mappedImage);
       requestAnimationFrame(() => draw(contextParam, imageParam, updatedParticles, mappedImage));
     },
-    [],
+    [backgroundColor],
   );
 
   /**
-   * sets given height and width to canvas
+   * sets given image height and width to canvas
    */
   useEffect(() => {
     if (!canvas || !image) {
@@ -79,7 +95,8 @@ export const CanvasImageMaker: React.FC<Props> = ({
   }, [canvas]);
 
   /**
-   * starts drawing if sentences ready
+   * creates mappedImage, particles and
+   * starts drawing
    */
   useEffect(() => {
     if (!context || !image) {
@@ -90,17 +107,21 @@ export const CanvasImageMaker: React.FC<Props> = ({
     const pixels = context.getImageData(0, 0, image.width, image.height);
     context.clearRect(0, 0, image.width, image.height);
 
-    const mappedImage = colorHelper.createMappedImage(pixels, image);
+    const mappedImage = colorHelper.createMappedImage(pixels, image, removeBlackArea, drawerColor);
     const particles = particleHelper.createParticles(
       image,
       particleNumberMultiplier,
       velocityMultiplier,
       sizeMultiplier,
+      drawer,
     );
 
     draw(context, image, particles, mappedImage);
   }, [draw, context, image]);
 
+  /**
+   * sets image when it is loaded
+   */
   useEffect(() => {
     if (!src) {
       return;

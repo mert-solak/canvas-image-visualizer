@@ -1,10 +1,10 @@
 {
-  "name": "@mertsolak/canvas-image-maker",
+  "name": "@mertsolak/canvas-image-visualizer",
   "version": "1.0.0",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/mert-solak/canvas-image-maker.git"
+    "url": "https://github.com/mert-solak/canvas-image-visualizer.git"
   },
   "scripts": {
     "build": "rollup -c",
