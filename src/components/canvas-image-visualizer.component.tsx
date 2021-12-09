@@ -22,8 +22,6 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
   const [context, setContext] = useState<CanvasRenderingContext2D | undefined>();
   const [image, setImage] = useState<HTMLImageElement | undefined>();
 
-  const mouseCoordinateRef = useRef({ x: 0, y: 0 });
-
   /**
    * draws particles recursively and updates
    * coordinates and velocities for the next frames
@@ -74,26 +72,15 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
   }, [canvas, image]);
 
   /**
-   * sets event listener to follow cursor
-   * and sets context
+   * sets context
    */
   useEffect(() => {
     if (!canvas) {
-      return () => {};
+      return;
     }
 
     const context2D = canvas?.getContext('2d');
     setContext(context2D);
-
-    const mouseMove = (event: MouseEvent) => {
-      mouseCoordinateRef.current = {
-        x: event.offsetX,
-        y: event.offsetY,
-      };
-    };
-
-    document?.addEventListener('mousemove', mouseMove);
-    return () => document?.removeEventListener('mousemove', mouseMove);
   }, [canvas]);
 
   /**
