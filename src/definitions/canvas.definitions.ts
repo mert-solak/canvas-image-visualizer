@@ -3,11 +3,13 @@ export interface Props {
   particleNumberMultiplier?: number;
   velocityMultiplier?: number;
   backgroundColor?: string;
-  sizeMultiplier?: number;
+  size?: number;
+  fontFamily?: string;
   removeBlackArea?: boolean;
   className?: string;
   drawer?: Drawer;
   drawerColor?: string | undefined;
+  globalAlpha?: number;
 }
 
 export type Drawer =
@@ -39,7 +41,8 @@ export interface CanvasConfigDefaults {
   globalAlpha: number;
   particleNumberMultiplier: number;
   velocityMultiplier: number;
-  sizeMultiplier: number;
+  size: number;
+  fontFamily: string;
   backgroundColor: string;
   removeBlackArea: boolean;
   drawer: Drawer;

@@ -5,7 +5,7 @@ import { Drawer, MappedImage, Particle } from '../definitions';
  * @param image @type HTMLImageElement
  * @param particleNumberMultiplier @type number
  * @param velocityMultiplier @type number
- * @param sizeMultiplier @type number
+ * @param size @type number
  * @param drawer @type Drawer
  * @returns Particle[]
  */
@@ -13,7 +13,7 @@ export const createParticles = (
   image: HTMLImageElement,
   particleNumberMultiplier: number,
   velocityMultiplier: number,
-  sizeMultiplier: number,
+  size: number,
   drawer: Drawer,
 ) => {
   const particles: Particle[] = [];
@@ -31,7 +31,7 @@ export const createParticles = (
       y: 0,
       text,
       speed: 0,
-      size: Math.random() * sizeMultiplier + 1,
+      size,
       velocity: Math.random() * velocityMultiplier,
     });
   }

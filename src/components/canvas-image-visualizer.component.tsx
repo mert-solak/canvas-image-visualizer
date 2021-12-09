@@ -9,9 +9,11 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
   particleNumberMultiplier = canvasConfig.defaults.particleNumberMultiplier,
   velocityMultiplier = canvasConfig.defaults.velocityMultiplier,
   backgroundColor = canvasConfig.defaults.backgroundColor,
-  sizeMultiplier = canvasConfig.defaults.sizeMultiplier,
+  size = canvasConfig.defaults.size,
+  fontFamily = canvasConfig.defaults.fontFamily,
   removeBlackArea = canvasConfig.defaults.removeBlackArea,
   drawer = canvasConfig.defaults.drawer,
+  globalAlpha = canvasConfig.defaults.globalAlpha,
   drawerColor,
   className,
   src,
@@ -38,14 +40,14 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
       mappedImage: MappedImage,
     ) => {
       contextParam.fillStyle = backgroundColor;
-      contextParam.globalAlpha = canvasConfig.defaults.globalAlpha;
+      contextParam.globalAlpha = globalAlpha;
       contextParam.fillRect(0, 0, imageParam.width, imageParam.height);
 
       particles.forEach((particle) => {
         contextParam.beginPath();
         contextParam.fillStyle = mappedImage[Math.floor(particle.y)][Math.floor(particle.x)].color;
         if (particle.text) {
-          contextParam.font = `${particle.size}`;
+          contextParam.font = `${particle.size}px ${fontFamily}`;
           contextParam.fillText(particle.text, particle.x, particle.y);
         } else {
           contextParam.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
@@ -112,7 +114,7 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
       image,
       particleNumberMultiplier,
       velocityMultiplier,
-      sizeMultiplier,
+      size,
       drawer,
     );
 
@@ -129,6 +131,7 @@ export const CanvasImageVisualizer: React.FC<Props> = ({
 
     const newImage = new Image();
     newImage.src = src;
+    newImage.crossOrigin = 'Anonymous';
     newImage.onload = () => {
       setImage(newImage);
     };
