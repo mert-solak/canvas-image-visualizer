@@ -6,7 +6,7 @@ export const defaults: CanvasConfigDefaults = {
   velocityMultiplier: 3.5,
   size: 25,
   fontFamily: 'sans-serif',
-  backgroundColor: 'black',
+  backgroundColor: 'transparent',
   removeBlackArea: true,
   drawer: {
     type: 'text',

@@ -40,7 +40,7 @@ export const createMappedImage = (
         color = drawerColor;
       }
       if (removeBlackArea && brightness === 0) {
-        color = 'rgb(0, 0, 0)';
+        color = 'rgb(0, 0, 0, 0)';
       }
       row.push({ brightness, color });
     }
